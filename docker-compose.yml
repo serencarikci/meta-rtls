@@ -1,0 +1,48 @@
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    container_name: metartls-oracle
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_SYS_PASSWORD:-Oracle_Dev_123}
+      APP_USER: ${ORACLE_USER:-metartls}
+      APP_USER_PASSWORD: ${ORACLE_PASSWORD:-MetaRTLS_Dev_123}
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./backend/migrations/oracle:/container-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
+      start_period: 120s
+
+  redis:
+    image: redis:7-alpine
+    container_name: metartls-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: metartls-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./deploy/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/#' -C 1 -i healthcheck -W 3 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  oracle-data:
