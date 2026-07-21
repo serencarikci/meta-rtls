@@ -47,6 +47,14 @@ On first start, the API creates these users with bcrypt.
 - `POST /api/v1/metadata/validate`
 - `GET /api/v1/metadata/features`
 
+## Phase 3 live APIs
+
+- `GET /api/v1/locations/latest`
+- `GET /api/v1/ws/locations?token=...` (WebSocket)
+- `GET /api/v1/simulator/status`
+- `POST /api/v1/simulator/start`
+- `POST /api/v1/simulator/stop`
+
 ## Next step
 
-Phase 3: MQTT simulator + location ingestion + WebSocket live map.
+Phase 4: requirement compare + change impact analysis.

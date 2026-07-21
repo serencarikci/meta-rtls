@@ -203,7 +203,6 @@ WHERE id = HEXTORAW(:2) AND tenant_id = HEXTORAW(:3)`,
 		return nil, err
 	}
 
-	// TODO: copy old fields into the new version
 	oldFields, err := r.ListFields(ctx, tenantID, current.ID)
 	if err != nil {
 		return nil, err

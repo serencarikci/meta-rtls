@@ -36,7 +36,7 @@ func Load() (*Config, error) {
 
 	cfg := &Config{
 		AppEnv:        getEnv("APP_ENV", "development"),
-		AppPort:       getEnv("APP_PORT", "8080"),
+		AppPort:       getEnv("APP_PORT", "8090"),
 		JWTSecret:     getEnv("JWT_SECRET", "dev-only-secret-change-me"),
 		JWTTTLMinutes: ttl,
 		OracleUser:    getEnv("ORACLE_USER", "metartls"),

@@ -82,8 +82,6 @@ func (s *Service) CreateField(ctx context.Context, tenantID, versionID string, r
 		return nil, fmt.Errorf("%w: enum needs values", ERR_BAD_REQUEST)
 	}
 
-	// find definition id from current version list owner: scan versions is heavy; store via field join
-	// TODO: add GetVersion helper later
 	versionsOwned, err := s.findDefinitionIDForVersion(ctx, tenantID, versionID)
 	if err != nil {
 		return nil, err

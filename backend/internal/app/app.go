@@ -9,6 +9,7 @@ import (
 
 	"github.com/denizyetis/meta-rtls/internal/config"
 	"github.com/denizyetis/meta-rtls/internal/modules/identity"
+	"github.com/denizyetis/meta-rtls/internal/modules/location"
 	"github.com/denizyetis/meta-rtls/internal/modules/metadata"
 	"github.com/denizyetis/meta-rtls/internal/modules/rtlsconfig"
 	"github.com/denizyetis/meta-rtls/internal/modules/tenant"
@@ -23,7 +24,8 @@ type App struct {
 	db     *sql.DB
 	logger *slog.Logger
 	router *gin.Engine
-	idSvc  *identity.Service
+	mqtt   *location.MQTTWorker
+	sim    *location.Simulator
 }
 
 func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
@@ -41,6 +43,13 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	rtlsHandler := rtlsconfig.NewHandler(rtlsconfig.NewService(rtlsconfig.NewRepository(db)))
 	metaSvc := metadata.NewService(metadata.NewRepository(db))
 	metaHandler := metadata.NewHandler(metaSvc)
+
+	hub := location.NewHub()
+	locRepo := location.NewRepository(db)
+	locSvc := location.NewService(locRepo, hub, logger)
+	mqttWorker := location.NewMQTTWorker(cfg.MQTTBroker, cfg.MQTTClientID, cfg.MQTTTopic, locSvc, logger)
+	sim := location.NewSimulator(locRepo, locSvc, mqttWorker, logger)
+	locHandler := location.NewHandler(locSvc, sim, tokens)
 
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -65,8 +74,9 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	tenantHandler.Register(protected)
 	rtlsHandler.Register(protected)
 	metaHandler.Register(protected)
+	locHandler.Register(api, protected)
 
-	a := &App{cfg: cfg, db: db, logger: logger, router: r, idSvc: idSvc}
+	a := &App{cfg: cfg, db: db, logger: logger, router: r, mqtt: mqttWorker, sim: sim}
 
 	bootCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -77,12 +87,23 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 		logger.Warn("demo metadata bootstrap skipped or failed", "err", err)
 	}
 
+	mqttWorker.Start()
+	if err := sim.Start(bootCtx); err != nil {
+		logger.Warn("simulator start skipped or failed", "err", err)
+	}
+
 	return a, nil
 }
 
 func (a *App) Router() http.Handler { return a.router }
 
 func (a *App) Close() {
+	if a.sim != nil {
+		a.sim.Stop()
+	}
+	if a.mqtt != nil {
+		a.mqtt.Stop()
+	}
 }
 
 func requestLogger(logger *slog.Logger) gin.HandlerFunc {

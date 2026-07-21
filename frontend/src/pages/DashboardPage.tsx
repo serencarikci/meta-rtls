@@ -23,7 +23,7 @@ export default function DashboardPage() {
   const stats = [
     { label: 'Sites', value: sites.data?.length ?? '—' },
     { label: 'Floors', value: floors.data?.length ?? '—' },
-    { label: 'Phase', value: '02 / 05' },
+    { label: 'Phase', value: '03 / 05' },
     { label: 'Engine', value: 'Oracle + Go' },
   ]
 
@@ -78,9 +78,9 @@ export default function DashboardPage() {
           <Typography
             sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 740, fontSize: '1.6rem' }}
           >
-            Phase 2 complete.
+            Phase 3 live map
             <br />
-            MQTT comes next.
+            MQTT tags moving.
           </Typography>
         </Paper>
       </Box>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Phase 1: Auth + tenant + site hierarchy ✓ · Phase 2: Metadata engine ✓ · Phase 3: MQTT
-          simulator + live map · Phase 4: Requirement / impact analysis · Phase 5: Production
+          simulator + live map ✓ · Phase 4: Requirement / impact analysis · Phase 5: Production
           quality
         </Typography>
       </Paper>
