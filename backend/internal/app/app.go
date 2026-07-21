@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/denizyetis/meta-rtls/internal/config"
+	"github.com/denizyetis/meta-rtls/internal/modules/analysis"
 	"github.com/denizyetis/meta-rtls/internal/modules/identity"
 	"github.com/denizyetis/meta-rtls/internal/modules/location"
 	"github.com/denizyetis/meta-rtls/internal/modules/metadata"
@@ -50,6 +51,8 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	mqttWorker := location.NewMQTTWorker(cfg.MQTTBroker, cfg.MQTTClientID, cfg.MQTTTopic, locSvc, logger)
 	sim := location.NewSimulator(locRepo, locSvc, mqttWorker, logger)
 	locHandler := location.NewHandler(locSvc, sim, tokens)
+	analysisSvc := analysis.NewService(analysis.NewRepository(db))
+	analysisHandler := analysis.NewHandler(analysisSvc)
 
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -75,6 +78,7 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	rtlsHandler.Register(protected)
 	metaHandler.Register(protected)
 	locHandler.Register(api, protected)
+	analysisHandler.Register(protected)
 
 	a := &App{cfg: cfg, db: db, logger: logger, router: r, mqtt: mqttWorker, sim: sim}
 
@@ -85,6 +89,9 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	}
 	if err := metaSvc.BootstrapDemoMetadata(bootCtx); err != nil {
 		logger.Warn("demo metadata bootstrap skipped or failed", "err", err)
+	}
+	if err := analysisSvc.Bootstrap(bootCtx); err != nil {
+		logger.Warn("analysis bootstrap skipped or failed", "err", err)
 	}
 
 	mqttWorker.Start()

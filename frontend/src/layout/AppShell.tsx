@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { to: '/sites', label: 'Sites & Zones' },
   { to: '/metadata', label: 'Metadata' },
   { to: '/live-map', label: 'Live Map' },
+  { to: '/analysis', label: 'Analysis' },
 ]
 
 const SIDEBAR_WIDTH = 232
