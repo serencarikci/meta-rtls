@@ -43,11 +43,6 @@ func (s *Service) CompareProfiles(ctx context.Context) (*CompareResponse, error)
 }
 
 func (s *Service) AnalyzeImpact(ctx context.Context, tenantID string, req ImpactRequest) (*ImpactResult, error) {
-	req.RequestType = strings.ToUpper(strings.TrimSpace(req.RequestType))
-	if req.RequestType == "" {
-		req.RequestType = "ADD_METADATA_FIELD"
-	}
-
 	tenantCount, err := s.repo.CountTenants(ctx)
 	if err != nil {
 		return nil, err
@@ -59,6 +54,26 @@ func (s *Service) AnalyzeImpact(ctx context.Context, tenantID string, req Impact
 	expectedTags, err := s.repo.SumExpectedTags(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	result := buildImpactResult(req, tenantCount, liveEntities, expectedTags)
+
+	if req.Save {
+		id, err := s.repo.SaveChangeRequest(ctx, tenantID, result, req)
+		if err != nil {
+			return nil, err
+		}
+		result.SavedID = id
+		_ = s.repo.InsertAudit(ctx, tenantID, "IMPACT_ANALYZED", fmt.Sprintf(`{"title":%q,"risk":%q}`, req.Title, result.RiskLevel))
+	}
+
+	return &result, nil
+}
+
+func buildImpactResult(req ImpactRequest, tenantCount, liveEntities, expectedTags int) ImpactResult {
+	req.RequestType = strings.ToUpper(strings.TrimSpace(req.RequestType))
+	if req.RequestType == "" {
+		req.RequestType = "ADD_METADATA_FIELD"
 	}
 
 	affectedEntities := liveEntities
@@ -101,9 +116,8 @@ func (s *Service) AnalyzeImpact(ctx context.Context, tenantID string, req Impact
 	}
 
 	migration := req.IsRequired || req.RequestType == "REMOVE_METADATA_FIELD" || req.RequestType == "CHANGE_FIELD_TYPE"
-	backward := !migration
 
-	result := &ImpactResult{
+	return ImpactResult{
 		Title:              req.Title,
 		RequestType:        req.RequestType,
 		AffectedTenants:    tenantCount,
@@ -111,23 +125,12 @@ func (s *Service) AnalyzeImpact(ctx context.Context, tenantID string, req Impact
 		MigrationRequired:  migration,
 		RiskLevel:          risk,
 		ComplexityScore:    score,
-		BackwardCompatible: backward,
+		BackwardCompatible: !migration,
 		Summary: fmt.Sprintf(
 			"Change '%s' touches about %d tenants and %d entities. Risk=%s, score=%.0f.",
 			req.Title, tenantCount, affectedEntities, risk, score,
 		),
 	}
-
-	if req.Save {
-		id, err := s.repo.SaveChangeRequest(ctx, tenantID, *result, req)
-		if err != nil {
-			return nil, err
-		}
-		result.SavedID = id
-		_ = s.repo.InsertAudit(ctx, tenantID, "IMPACT_ANALYZED", fmt.Sprintf(`{"title":%q,"risk":%q}`, req.Title, risk))
-	}
-
-	return result, nil
 }
 
 func (s *Service) ListChangeRequests(ctx context.Context, tenantID string) ([]ChangeRequest, error) {

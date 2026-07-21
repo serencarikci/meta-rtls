@@ -26,12 +26,12 @@ npm run dev
 
 UI: http://localhost:5173
 
-Vite proxies `/api` and `/health` to `http://localhost:8090`.
+Vite proxies `/api`, `/health` and `/ready` to `http://localhost:8090`.
 
 ## Main screens
 
 - Login (demo tenants)
-- Overview
+- Overview (includes API / Oracle ready status)
 - Sites & Zones
 - Metadata
 - Live Map (moving tags)
@@ -41,7 +41,7 @@ Vite proxies `/api` and `/health` to `http://localhost:8090`.
 
 ```bash
 npm run dev       # local UI
-npm run build     # production build
+npm run build     # production build (also used in CI)
 npm run format    # Prettier
 npm run preview   # preview build
 ```
@@ -66,4 +66,4 @@ src/
 | hospital-m | admin@hospital-m.demo | MetaRTLS!2026 |
 | factory-l | admin@factory-l.demo | MetaRTLS!2026 |
 
-If login fails, check that the backend is running on port 8090.
+If login fails, check that the backend is running on port 8090 and that `/ready` returns OK.

@@ -15,9 +15,9 @@ frontend/dist/
 frontend/coverage/
 *.local
 
+config/config.env
 .env
 .env.*
-!.env.example
 
 .idea/
 .vscode/

@@ -56,6 +56,7 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 
 	r := gin.New()
 	r.Use(gin.Recovery())
+	r.Use(securityHeaders())
 	r.Use(requestLogger(logger))
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     cfg.CORSOrigins,
@@ -67,7 +68,25 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	}))
 
 	r.GET("/health", func(c *gin.Context) {
-		response.OK(c, gin.H{"service": "metartls", "status": "ok"})
+		response.OK(c, gin.H{
+			"service": "metartls",
+			"status":  "ok",
+			"env":     cfg.AppEnv,
+		})
+	})
+
+	r.GET("/ready", func(c *gin.Context) {
+		pingCtx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+		defer cancel()
+		if err := db.PingContext(pingCtx); err != nil {
+			response.Fail(c, http.StatusServiceUnavailable, "oracle not ready")
+			return
+		}
+		response.OK(c, gin.H{
+			"service": "metartls",
+			"status":  "ready",
+			"oracle":  "up",
+		})
 	})
 
 	api := r.Group("/api/v1")
@@ -110,6 +129,16 @@ func (a *App) Close() {
 	}
 	if a.mqtt != nil {
 		a.mqtt.Stop()
+	}
+}
+
+func securityHeaders() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("Referrer-Policy", "no-referrer")
+		c.Header("X-XSS-Protection", "0")
+		c.Next()
 	}
 }
 

@@ -1,11 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
-import { Alert, Box, Paper, Stack, Typography } from '@mui/material'
+import { Alert, Box, Chip, Paper, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { api } from '../api/client'
 import { useAuthStore } from '../store/auth'
 
 type Site = { id: string; code: string; name: string; timezone: string }
 type Floor = { id: string; code: string; name: string; widthM: number; heightM: number }
+type ReadyStatus = { service: string; status: string; oracle: string }
+
+async function fetchReady(): Promise<{ ok: boolean; data?: ReadyStatus }> {
+  const res = await fetch('/ready')
+  const body = await res.json().catch(() => ({}))
+  return { ok: res.ok, data: body.data as ReadyStatus | undefined }
+}
 
 export default function DashboardPage() {
   const token = useAuthStore((s) => s.token)
@@ -19,12 +26,18 @@ export default function DashboardPage() {
     queryKey: ['floors'],
     queryFn: () => api<Floor[]>('/api/v1/floors', {}, token),
   })
+  const ready = useQuery({
+    queryKey: ['ready'],
+    queryFn: fetchReady,
+    refetchInterval: 15000,
+  })
 
+  const apiReady = ready.data?.ok === true
   const stats = [
     { label: 'Sites', value: sites.data?.length ?? '—' },
     { label: 'Floors', value: floors.data?.length ?? '—' },
-    { label: 'Stack', value: 'Go + React' },
-    { label: 'Database', value: 'Oracle' },
+    { label: 'API', value: apiReady ? 'ready' : 'checking' },
+    { label: 'Oracle', value: ready.data?.data?.oracle ?? '—' },
   ]
 
   return (
@@ -69,11 +82,19 @@ export default function DashboardPage() {
             minHeight: 180,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Box className="signal-dot" />
             <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.75rem' }}>
-              SIGNAL READY
+              SYSTEM STATUS
             </Typography>
+            <Chip
+              size="small"
+              label={apiReady ? 'API + Oracle up' : 'Waiting for /ready'}
+              sx={{
+                bgcolor: apiReady ? 'rgba(200,75,255,0.25)' : 'rgba(252,250,253,0.12)',
+                color: '#FCFAFD',
+              }}
+            />
           </Box>
           <Typography
             sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 740, fontSize: '1.6rem' }}
@@ -85,9 +106,9 @@ export default function DashboardPage() {
         </Paper>
       </Box>
 
-      {(sites.isError || floors.isError) && (
+      {(sites.isError || floors.isError || ready.data?.ok === false) && (
         <Alert severity="warning">
-          If the API is not ready yet, wait until Oracle is up (`make up`).
+          If the API is not ready yet, wait until Oracle is up (`make up`). Check `/ready`.
         </Alert>
       )}
 

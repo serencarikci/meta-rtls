@@ -12,6 +12,7 @@ export default defineConfig({
         ws: true,
       },
       '/health': 'http://localhost:8090',
+      '/ready': 'http://localhost:8090',
     },
   },
 })

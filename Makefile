@@ -1,4 +1,4 @@
-.PHONY: help up down logs backend-run frontend-run migrate deps test lint fmt
+.PHONY: help up down logs backend-run frontend-run migrate deps test lint fmt ready
 
 help:
 	@echo "MetaRTLS targets:"
@@ -8,16 +8,17 @@ help:
 	@echo "  make deps          - Install Go and frontend dependencies"
 	@echo "  make backend-run   - Run Go API (local)"
 	@echo "  make frontend-run  - Run React app (local)"
+	@echo "  make ready         - Check API /ready (Oracle ping)"
 	@echo "  make fmt           - Format Go (gofmt) and React (Prettier)"
 	@echo "  make test          - Run backend tests"
-	@echo "  make lint          - Run golangci-lint if available"
+	@echo "  make lint          - Run go vet + gofmt check"
 
 fmt:
 	cd backend && go fmt ./...
 	cd frontend && npm run format
 
 up:
-	docker compose --env-file .env.example up -d
+	docker compose up -d
 
 down:
 	docker compose down
@@ -35,8 +36,11 @@ backend-run:
 frontend-run:
 	cd frontend && npm run dev
 
+ready:
+	curl -sf http://localhost:8090/ready | python3 -m json.tool
+
 test:
 	cd backend && go test ./...
 
 lint:
-	cd backend && golangci-lint run ./... || true
+	cd backend && test -z "$$(gofmt -l .)" && go vet ./...
