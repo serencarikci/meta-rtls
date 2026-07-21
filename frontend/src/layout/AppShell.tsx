@@ -10,8 +10,6 @@ const NAV_ITEMS = [
   { to: '/analysis', label: 'Analysis' },
 ]
 
-const SIDEBAR_WIDTH = 232
-
 export default function AppShell() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
@@ -19,138 +17,123 @@ export default function AppShell() {
   const clear = useAuthStore((s) => s.clear)
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Box
-        component="aside"
+        component="header"
         sx={{
-          width: SIDEBAR_WIDTH,
-          flexShrink: 0,
-          position: 'fixed',
-          inset: 0,
-          right: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          borderRight: '1px solid var(--line)',
-          background: 'linear-gradient(180deg, #241338 0%, #1A1028 100%)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 30,
+          borderBottom: '1px solid rgba(26,16,40,0.12)',
+          background: '#1A1028',
           color: '#FCFAFD',
-          zIndex: 20,
-        }}
-      >
-        <Box sx={{ px: 2.5, pt: 3, pb: 2.5, display: 'flex', alignItems: 'center', gap: 1.1 }}>
-          <Box className="signal-dot" />
-          <Typography
-            sx={{
-              fontFamily: '"Syne", sans-serif',
-              fontWeight: 800,
-              letterSpacing: '-0.04em',
-              fontSize: '1.25rem',
-            }}
-          >
-            MetaRTLS
-          </Typography>
-        </Box>
-
-        <Box sx={{ px: 1.5, display: 'flex', flexDirection: 'column', gap: 0.4, flex: 1 }}>
-          {NAV_ITEMS.map((item) => (
-            <Box
-              key={item.to}
-              component={NavLink}
-              to={item.to}
-              end={item.to === '/'}
-              sx={{
-                px: 1.5,
-                py: 1.1,
-                color: 'rgba(252,250,253,0.62)',
-                textDecoration: 'none',
-                fontFamily: '"Figtree", sans-serif',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                borderLeft: '3px solid transparent',
-                transition: 'color 0.15s ease, background 0.15s ease',
-                '&.active': {
-                  color: '#E9B7FF',
-                  background: 'rgba(200,75,255,0.12)',
-                  borderLeftColor: '#C84BFF',
-                },
-                '&:hover': { color: '#FCFAFD' },
-              }}
-            >
-              {item.label}
-            </Box>
-          ))}
-        </Box>
-
-        <Box sx={{ px: 2.5, pb: 2.5 }}>
-          <Typography
-            sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: '0.68rem',
-              letterSpacing: '0.08em',
-              color: 'rgba(200,75,255,0.85)',
-              mb: 0.5,
-              textTransform: 'uppercase',
-            }}
-          >
-            {tenantCode}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(252,250,253,0.75)', mb: 1.5 }}>
-            {user?.displayName}
-          </Typography>
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => {
-              clear()
-              navigate('/login')
-            }}
-            sx={{
-              color: '#FCFAFD',
-              borderColor: 'rgba(252,250,253,0.28)',
-              '&:hover': {
-                borderColor: '#C84BFF',
-                color: '#E9B7FF',
-                background: 'transparent',
-              },
-            }}
-          >
-            Sign out
-          </Button>
-        </Box>
-      </Box>
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          ml: `${SIDEBAR_WIDTH}px`,
-          minHeight: '100vh',
         }}
       >
         <Box
           sx={{
-            borderBottom: '1px solid var(--line)',
-            background: 'rgba(250,251,248,0.86)',
-            backdropFilter: 'blur(8px)',
-            px: 3,
-            py: 1.75,
-            position: 'sticky',
-            top: 0,
-            zIndex: 10,
+            maxWidth: 1180,
+            mx: 'auto',
+            px: { xs: 2, md: 3 },
+            py: 1.35,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            flexWrap: 'wrap',
           }}
         >
-          <Typography
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: { md: 1 } }}>
+            <Box className="signal-dot" />
+            <Typography sx={{ fontWeight: 700, fontSize: '1.15rem', letterSpacing: '-0.01em' }}>
+              MetaRTLS
+            </Typography>
+          </Box>
+
+          <Box
+            component="nav"
             sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: '0.72rem',
-              letterSpacing: '0.14em',
-              color: 'var(--mute)',
-              textTransform: 'uppercase',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              flex: 1,
+              minWidth: 0,
+              overflowX: 'auto',
+              py: 0.25,
             }}
           >
-            Indoor location control
-          </Typography>
+            {NAV_ITEMS.map((item) => (
+              <Box
+                key={item.to}
+                component={NavLink}
+                to={item.to}
+                end={item.to === '/'}
+                sx={{
+                  px: 1.5,
+                  py: 0.75,
+                  borderRadius: 999,
+                  color: 'rgba(252,250,253,0.72)',
+                  textDecoration: 'none',
+                  fontWeight: 650,
+                  fontSize: '0.94rem',
+                  whiteSpace: 'nowrap',
+                  transition: 'background 0.15s ease, color 0.15s ease',
+                  '&:hover': {
+                    color: '#FCFAFD',
+                    background: 'rgba(252,250,253,0.1)',
+                  },
+                  '&.active': {
+                    color: '#1A1028',
+                    background: '#C84BFF',
+                    fontWeight: 700,
+                  },
+                }}
+              >
+                {item.label}
+              </Box>
+            ))}
+          </Box>
+
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.25,
+              ml: 'auto',
+            }}
+          >
+            <Box sx={{ textAlign: 'right', display: { xs: 'none', sm: 'block' } }}>
+              <Typography sx={{ fontSize: '0.78rem', color: '#E9B7FF', fontWeight: 700 }}>
+                {tenantCode}
+              </Typography>
+              <Typography sx={{ fontSize: '0.84rem', color: 'rgba(252,250,253,0.7)', lineHeight: 1.2 }}>
+                {user?.displayName}
+              </Typography>
+            </Box>
+            <Button
+              size="small"
+              onClick={() => {
+                clear()
+                navigate('/login')
+              }}
+              sx={{
+                borderRadius: 999,
+                px: 1.75,
+                color: '#FCFAFD',
+                border: '1px solid rgba(252,250,253,0.35)',
+                '&:hover': {
+                  borderColor: '#C84BFF',
+                  color: '#E9B7FF',
+                  background: 'rgba(200,75,255,0.12)',
+                },
+              }}
+            >
+              Sign out
+            </Button>
+          </Box>
         </Box>
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+      </Box>
+
+      <Box component="main" sx={{ flex: 1 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 } }}>
           <Outlet />
         </Container>
       </Box>

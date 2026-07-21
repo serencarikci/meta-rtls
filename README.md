@@ -1,54 +1,74 @@
 # MetaRTLS
 
-Metadata-driven, multi-tenant RTLS platform. Built with Go, React and Oracle DB.
+MetaRTLS is a multi-tenant indoor location app.
+It uses Go, React and Oracle.
+You do not need real devices. The app can simulate moving tags.
 
-This app simulates indoor location tracking without real devices. Each customer (tenant) has its own sites, zones, metadata fields and live tags.
+## What you need
 
-## Stack
+- Docker Desktop
+- Go 1.24+
+- Node.js 22+
 
-| Part | Tech |
-|------|------|
-| Backend | Go, Gin, go-ora |
-| Frontend | React, TypeScript, Vite, MUI |
-| Database | Oracle 23ai Free |
-| Cache | Redis |
-| Messaging | MQTT (Mosquitto) |
-| Auth | JWT |
-| Live updates | WebSocket |
-| Local run | Docker Compose, Makefile |
-| CI | GitHub Actions |
+## How to start the whole project
 
-## What it does
+Open a terminal in the project root folder.
+Then run these steps in order.
 
-- Tenant login and isolation
-- Site → building → floor → zone setup
-- Metadata definitions, fields and validation
-- MQTT tag simulator and location history in Oracle
-- Live map over WebSocket
-- Compare small / medium / large customer needs
-- Simple change impact score for metadata updates
-- Health / ready checks, basic security headers, CI tests
-
-## Quick start
+### 1) Create your config file
 
 ```bash
 cp config/config-temp.env config/config.env
+```
+
+`config-temp.env` is the template.
+`config.env` is your local file (JSON).
+
+### 2) Start Oracle and MQTT
+
+```bash
 make up
+```
+
+This starts:
+- Oracle database on port `1521`
+- Mosquitto MQTT on port `1883`
+
+Wait 1–3 minutes the first time until Oracle is ready.
+
+### 3) Install dependencies
+
+```bash
 make deps
+```
+
+### 4) Start the backend API
+
+Open one terminal:
+
+```bash
 make backend-run
+```
+
+API URL: http://localhost:8090
+
+Check:
+- http://localhost:8090/health
+- http://localhost:8090/ready
+
+`/ready` must say Oracle is up.
+
+### 5) Start the frontend UI
+
+Open another terminal:
+
+```bash
 make frontend-run
 ```
 
-- API health: http://localhost:8090/health
-- API ready (Oracle ping): http://localhost:8090/ready
-- UI: http://localhost:5173
+UI URL: http://localhost:5173
 
-Oracle may need a few minutes on first start.
-
-```bash
-make ready   # when the API is running
-make test    # backend unit tests
-```
+Open this URL in your browser.
 
 ### Demo login
 
@@ -58,22 +78,89 @@ make test    # backend unit tests
 | hospital-m | admin@hospital-m.demo | MetaRTLS!2026 |
 | factory-l | admin@factory-l.demo | MetaRTLS!2026 |
 
+## Useful commands
+
+```bash
+make ready   # check API + Oracle
+make test    # run backend tests
+make down    # stop Docker services
+make logs    # show Docker logs
+```
+
+## Screenshots
+
+### Login
+
+![Login](docs/images/01-login.png)
+
+### Overview
+
+![Overview](docs/images/02-overview.png)
+
+### Sites & Zones
+
+![Sites and Zones](docs/images/03-sites-zones.png)
+
+### Metadata
+
+![Metadata](docs/images/04-metadata.png)
+
+### Live Map
+
+Moving tags on the floor plan (MQTT simulator + WebSocket):
+
+![Live Map](docs/images/05-live-map.png)
+
+### Analysis
+
+![Analysis](docs/images/06-analysis.png)
+
+## Stack
+
+| Part | Tech |
+|------|------|
+| Backend | Go, Gin, go-ora |
+| Frontend | React, TypeScript, Vite, MUI |
+| Database | Oracle 23ai Free |
+| Messaging | MQTT (Mosquitto) |
+| Auth | JWT |
+| Live updates | WebSocket |
+| Local run | Docker Compose, Makefile |
+| CI | GitHub Actions |
+
+## What it does
+
+- Tenant login
+- Sites, floors and zones
+- Metadata fields and validation
+- MQTT tag simulator
+- Live map with WebSocket
+- Compare small / medium / large tenants
+- Simple change impact score
+- Health and ready checks
+
+## More docs
+
+- Backend: `backend/README.md`
+- Frontend: `frontend/README.md`
+
 ## Production notes
 
-- Edit `config/config.env` (JSON)
+- Edit `config/config.env`
 - Set `appEnv` to `production`
-- Use a long random `jwtSecret` (32+ characters, not the template value)
+- Use a long random `jwtSecret` (32+ characters)
 - Set `corsOrigins` to your real UI URL
-- Keep secrets in `config/config.env` (gitignored; use `config-temp.env` as template)
+- Do not commit real secrets
 
 ## Folders
 
-- `backend/` — Go API (see `backend/README.md`)
-- `frontend/` — React app (see `frontend/README.md`)
-- `config/` — JSON app config (`config.env`, `config-temp.env`)
+- `backend/` — Go API
+- `frontend/` — React UI
+- `config/` — JSON config
+- `docs/images/` — screenshots
+- `logs/` — log files
 - `deploy/` — Mosquitto config
-- `docs/images/` — sample images
-- `.github/workflows/` — CI (gofmt, vet, test, build)
+- `.github/workflows/` — CI
 
 ## License
 

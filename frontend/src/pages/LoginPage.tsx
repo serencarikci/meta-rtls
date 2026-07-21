@@ -78,26 +78,16 @@ export default function LoginPage() {
       >
         <Box className="rise-in" sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
           <Box className="signal-dot" />
-          <Typography
-            sx={{
-              fontFamily: '"Syne", sans-serif',
-              fontWeight: 800,
-              fontSize: '1.35rem',
-              letterSpacing: '-0.04em',
-            }}
-          >
-            MetaRTLS
-          </Typography>
+          <Typography sx={{ fontWeight: 700, fontSize: '1.35rem' }}>MetaRTLS</Typography>
         </Box>
 
         <Box className="rise-in-delay" sx={{ maxWidth: 520 }}>
           <Typography
             sx={{
-              fontFamily: '"Syne", sans-serif',
-              fontWeight: 800,
-              fontSize: { md: '3.4rem', lg: '4.1rem' },
-              lineHeight: 0.95,
-              letterSpacing: '-0.05em',
+              fontWeight: 700,
+              fontSize: { md: '2.8rem', lg: '3.25rem' },
+              lineHeight: 1.18,
+              letterSpacing: '-0.02em',
               mb: 2.5,
             }}
           >
@@ -108,22 +98,21 @@ export default function LoginPage() {
               .
             </Box>
           </Typography>
-          <Typography sx={{ color: 'rgba(252,250,253,0.74)', maxWidth: 380, fontSize: '1.05rem' }}>
+          <Typography
+            sx={{
+              color: 'rgba(252,250,253,0.78)',
+              maxWidth: 400,
+              fontSize: '1.05rem',
+              lineHeight: 1.65,
+            }}
+          >
             Metadata-driven indoor tracking for warehouses, hospitals and factories — one model,
             many tenants.
           </Typography>
         </Box>
 
-        <Typography
-          sx={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: '0.72rem',
-            letterSpacing: '0.12em',
-            color: 'rgba(200,75,255,0.85)',
-            textTransform: 'uppercase',
-          }}
-        >
-          live signal · schema aware · multi-tenant
+        <Typography sx={{ fontSize: '0.9rem', color: 'rgba(233,183,255,0.9)', fontWeight: 500 }}>
+          Live signal · schema aware · multi-tenant
         </Typography>
       </Box>
 
@@ -140,9 +129,7 @@ export default function LoginPage() {
         <Box className="rise-in" sx={{ width: '100%', maxWidth: 400 }}>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1, mb: 3 }}>
             <Box className="signal-dot" />
-            <Typography sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 800 }}>
-              MetaRTLS
-            </Typography>
+            <Typography sx={{ fontWeight: 700 }}>MetaRTLS</Typography>
           </Box>
 
           <Typography variant="overline" sx={{ color: 'var(--mute)' }}>

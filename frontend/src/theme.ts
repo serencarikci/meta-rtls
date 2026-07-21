@@ -1,5 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 
+const FONT = '"Source Sans 3", "Segoe UI", sans-serif'
+
 export const APP_THEME = createTheme({
   palette: {
     mode: 'light',
@@ -11,56 +13,49 @@ export const APP_THEME = createTheme({
     divider: '#D8CFE6',
   },
   typography: {
-    fontFamily: '"Figtree", "Helvetica Neue", sans-serif',
-    h3: {
-      fontFamily: '"Syne", sans-serif',
-      fontWeight: 770,
-      letterSpacing: '-0.04em',
-    },
-    h4: {
-      fontFamily: '"Syne", sans-serif',
-      fontWeight: 740,
-      letterSpacing: '-0.03em',
-    },
-    h5: {
-      fontFamily: '"Syne", sans-serif',
-      fontWeight: 700,
-      letterSpacing: '-0.02em',
-    },
-    h6: {
-      fontFamily: '"Syne", sans-serif',
-      fontWeight: 700,
-    },
+    fontFamily: FONT,
+    fontSize: 15,
+    htmlFontSize: 16,
+    body1: { fontFamily: FONT, fontSize: '1rem', lineHeight: 1.65 },
+    body2: { fontFamily: FONT, fontSize: '0.95rem', lineHeight: 1.6 },
+    h3: { fontFamily: FONT, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.25 },
+    h4: { fontFamily: FONT, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.3 },
+    h5: { fontFamily: FONT, fontWeight: 650, letterSpacing: 0, lineHeight: 1.35 },
+    h6: { fontFamily: FONT, fontWeight: 650, letterSpacing: 0 },
     overline: {
-      fontFamily: '"JetBrains Mono", monospace',
-      letterSpacing: '0.14em',
-      fontWeight: 500,
+      fontFamily: FONT,
+      letterSpacing: '0.06em',
+      fontWeight: 600,
+      fontSize: '0.72rem',
     },
     button: {
+      fontFamily: FONT,
       textTransform: 'none',
-      fontWeight: 700,
-      letterSpacing: '-0.01em',
+      fontWeight: 600,
+      letterSpacing: 0,
     },
   },
-  shape: { borderRadius: 4 },
+  shape: { borderRadius: 12 },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
+          fontFamily: FONT,
           backgroundImage:
-            'radial-gradient(circle at 1px 1px, rgba(26,16,40,0.06) 1px, transparent 0)',
-          backgroundSize: '18px 18px',
+            'radial-gradient(circle at 1px 1px, rgba(26,16,40,0.05) 1px, transparent 0)',
+          backgroundSize: '20px 20px',
         },
       },
     },
     MuiButton: {
       styleOverrides: {
+        root: { fontFamily: FONT },
         containedPrimary: {
           backgroundColor: '#1A1028',
           color: '#F5E9FF',
           borderRadius: 999,
-          paddingLeft: 22,
-          paddingRight: 22,
+          paddingLeft: 20,
+          paddingRight: 20,
           boxShadow: 'none',
           '&:hover': {
             backgroundColor: '#2B1848',
@@ -86,7 +81,7 @@ export const APP_THEME = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#FFFFFF',
-          borderRadius: 4,
+          borderRadius: 12,
           '& fieldset': { borderColor: '#D8CFE6' },
           '&:hover fieldset': { borderColor: '#1A1028' },
           '&.Mui-focused fieldset': { borderColor: '#8B2FD6', borderWidth: 1.5 },
@@ -96,9 +91,10 @@ export const APP_THEME = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: 4,
-          fontFamily: '"JetBrains Mono", monospace',
-          fontSize: '0.75rem',
+          borderRadius: 999,
+          fontFamily: FONT,
+          fontSize: '0.8rem',
+          fontWeight: 600,
         },
       },
     },

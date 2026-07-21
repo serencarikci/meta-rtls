@@ -3,34 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Alert, Box, Button, Chip, Paper, Stack, Typography } from '@mui/material'
 import { api } from '../api/client'
 import { useAuthStore } from '../store/auth'
-
-type Floor = {
-  id: string
-  code: string
-  name: string
-  widthM: number
-  heightM: number
-}
-
-type Zone = {
-  id: string
-  code: string
-  name: string
-  minX: number
-  minY: number
-  maxX: number
-  maxY: number
-}
-
-type LivePosition = {
-  tagId: string
-  tagCode: string
-  floorId: string
-  x: number
-  y: number
-  zoneCode?: string
-  updatedAt: string
-}
+import type { Floor, LivePosition, Zone } from '../types/rtls'
 
 const MAP_SCALE = 8
 
@@ -190,7 +163,7 @@ export default function LiveMapPage() {
                   sx={{
                     fontWeight: 700,
                     color: '#1A1028',
-                    fontFamily: '"JetBrains Mono", monospace',
+                    fontSize: '0.72rem',
                   }}
                 >
                   {z.code}
@@ -221,11 +194,10 @@ export default function LiveMapPage() {
                     top: 16,
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    fontSize: 10,
-                    fontFamily: '"JetBrains Mono", monospace',
+                    fontSize: 11,
                     whiteSpace: 'nowrap',
                     color: '#1A1028',
-                    fontWeight: 700,
+                    fontWeight: 600,
                   }}
                 >
                   {pos.tagCode}

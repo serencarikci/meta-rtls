@@ -18,24 +18,11 @@ services:
       retries: 20
       start_period: 120s
 
-  redis:
-    image: redis:7-alpine
-    container_name: metartls-redis
-    ports:
-      - "6379:6379"
-    command: ["redis-server", "--save", "", "--appendonly", "no"]
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: metartls-mosquitto
     ports:
       - "1883:1883"
-      - "9001:9001"
     volumes:
       - ./deploy/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
     healthcheck:

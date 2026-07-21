@@ -399,7 +399,6 @@ export default function MetadataPage() {
             minRows={5}
             value={validateJson}
             onChange={(e) => setValidateJson(e.target.value)}
-            sx={{ fontFamily: 'IBM Plex Mono, monospace' }}
           />
           <Button sx={{ mt: 1 }} variant="contained" onClick={onValidate}>
             Validate

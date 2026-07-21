@@ -3,9 +3,8 @@ import { Alert, Box, Chip, Paper, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { api } from '../api/client'
 import { useAuthStore } from '../store/auth'
+import type { Floor, Site } from '../types/rtls'
 
-type Site = { id: string; code: string; name: string; timezone: string }
-type Floor = { id: string; code: string; name: string; widthM: number; heightM: number }
 type ReadyStatus = { service: string; status: string; oracle: string }
 
 async function fetchReady(): Promise<{ ok: boolean; data?: ReadyStatus }> {
@@ -84,7 +83,7 @@ export default function DashboardPage() {
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Box className="signal-dot" />
-            <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.75rem' }}>
+            <Typography sx={{ fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em' }}>
               SYSTEM STATUS
             </Typography>
             <Chip
@@ -97,7 +96,11 @@ export default function DashboardPage() {
             />
           </Box>
           <Typography
-            sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 740, fontSize: '1.6rem' }}
+            sx={{
+              fontWeight: 700,
+              fontSize: '1.4rem',
+              lineHeight: 1.35,
+            }}
           >
             Live tags online.
             <br />

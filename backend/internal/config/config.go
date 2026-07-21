@@ -16,9 +16,6 @@ type fileConfig struct {
 	OracleUser        string   `json:"oracleUser"`
 	OraclePassword    string   `json:"oraclePassword"`
 	OracleDSN         string   `json:"oracleDsn"`
-	OracleSysPassword string   `json:"oracleSysPassword"`
-	RedisAddr         string   `json:"redisAddr"`
-	RedisPassword     string   `json:"redisPassword"`
 	MQTTBroker        string   `json:"mqttBroker"`
 	MQTTClientID      string   `json:"mqttClientId"`
 	MQTTTopicLocation string   `json:"mqttTopicLocation"`
@@ -26,20 +23,17 @@ type fileConfig struct {
 }
 
 type Config struct {
-	AppEnv            string
-	AppPort           string
-	JWTSecret         string
-	JWTTTLMinutes     int
-	OracleUser        string
-	OraclePass        string
-	OracleDSNHost     string
-	OracleSysPassword string
-	RedisAddr         string
-	RedisPassword     string
-	MQTTBroker        string
-	MQTTClientID      string
-	MQTTTopic         string
-	CORSOrigins       []string
+	AppEnv        string
+	AppPort       string
+	JWTSecret     string
+	JWTTTLMinutes int
+	OracleUser    string
+	OraclePass    string
+	OracleDSNHost string
+	MQTTBroker    string
+	MQTTClientID  string
+	MQTTTopic     string
+	CORSOrigins   []string
 }
 
 func Load() (*Config, error) {
@@ -75,20 +69,17 @@ func Load() (*Config, error) {
 	}
 
 	cfg := &Config{
-		AppEnv:            defaultString(file.AppEnv, "development"),
-		AppPort:           defaultString(file.AppPort, "8090"),
-		JWTSecret:         defaultString(file.JWTSecret, "dev-only-secret-change-me"),
-		JWTTTLMinutes:     ttl,
-		OracleUser:        defaultString(file.OracleUser, "metartls"),
-		OraclePass:        defaultString(file.OraclePassword, "MetaRTLS_Dev_123"),
-		OracleDSNHost:     defaultString(file.OracleDSN, "localhost:1521/FREEPDB1"),
-		OracleSysPassword: defaultString(file.OracleSysPassword, "Oracle_Dev_123"),
-		RedisAddr:         defaultString(file.RedisAddr, "localhost:6379"),
-		RedisPassword:     file.RedisPassword,
-		MQTTBroker:        defaultString(file.MQTTBroker, "tcp://localhost:1883"),
-		MQTTClientID:      defaultString(file.MQTTClientID, "metartls-api"),
-		MQTTTopic:         defaultString(file.MQTTTopicLocation, "rtls/+/location"),
-		CORSOrigins:       origins,
+		AppEnv:        defaultString(file.AppEnv, "development"),
+		AppPort:       defaultString(file.AppPort, "8090"),
+		JWTSecret:     defaultString(file.JWTSecret, "dev-only-secret-change-me"),
+		JWTTTLMinutes: ttl,
+		OracleUser:    defaultString(file.OracleUser, "metartls"),
+		OraclePass:    defaultString(file.OraclePassword, "MetaRTLS_Dev_123"),
+		OracleDSNHost: defaultString(file.OracleDSN, "localhost:1521/FREEPDB1"),
+		MQTTBroker:    defaultString(file.MQTTBroker, "tcp://localhost:1883"),
+		MQTTClientID:  defaultString(file.MQTTClientID, "metartls-api"),
+		MQTTTopic:     defaultString(file.MQTTTopicLocation, "rtls/+/location"),
+		CORSOrigins:   origins,
 	}
 
 	if err := cfg.Validate(); err != nil {

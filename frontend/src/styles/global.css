@@ -1,12 +1,9 @@
 :root {
   --ink: #1a1028;
-  --ink-soft: #3a2a55;
   --fog: #efeaf6;
-  --paper: #fcfafd;
   --line: #d8cfe6;
   --signal: #c84bff;
   --signal-deep: #8b2fd6;
-  --warn: #e4572e;
   --mute: #746887;
 }
 

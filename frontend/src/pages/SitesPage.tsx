@@ -13,18 +13,7 @@ import {
 } from '@mui/material'
 import { api } from '../api/client'
 import { useAuthStore } from '../store/auth'
-
-type Site = { id: string; code: string; name: string; timezone: string; status: string }
-type Building = { id: string; code: string; name: string; siteId: string }
-type Floor = {
-  id: string
-  buildingId: string
-  code: string
-  name: string
-  widthM: number
-  heightM: number
-  levelIndex: number
-}
+import type { Building, Floor, Site } from '../types/rtls'
 
 export default function SitesPage() {
   const token = useAuthStore((s) => s.token)

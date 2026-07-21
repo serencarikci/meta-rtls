@@ -311,7 +311,7 @@ CREATE TABLE change_requests (
 );
 
 CREATE TABLE location_events (
-    id              RAW(16) DEFAULT SYS_GUID() NOT NULL,
+    id              RAW(16) DEFAULT SYS_GUID() PRIMARY KEY,
     tenant_id       RAW(16) NOT NULL,
     tag_id          RAW(16) NOT NULL,
     floor_id        RAW(16) NOT NULL,
@@ -319,13 +319,7 @@ CREATE TABLE location_events (
     y               NUMBER(12,3) NOT NULL,
     quality         NUMBER(5,2),
     event_ts        TIMESTAMP WITH TIME ZONE NOT NULL,
-    ingested_at     TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,
-    CONSTRAINT pk_location_events PRIMARY KEY (id, event_ts)
-)
-PARTITION BY RANGE (event_ts)
-INTERVAL (NUMTODSINTERVAL(1, 'DAY'))
-(
-    PARTITION p_loc_bootstrap VALUES LESS THAN (TIMESTAMP '2026-01-01 00:00:00 UTC')
+    ingested_at     TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL
 );
 
 CREATE INDEX ix_loc_tenant_ts ON location_events (tenant_id, event_ts);

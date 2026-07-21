@@ -21,9 +21,6 @@ import (
 )
 
 type App struct {
-	cfg    *config.Config
-	db     *sql.DB
-	logger *slog.Logger
 	router *gin.Engine
 	mqtt   *location.MQTTWorker
 	sim    *location.Simulator
@@ -99,7 +96,7 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	locHandler.Register(api, protected)
 	analysisHandler.Register(protected)
 
-	a := &App{cfg: cfg, db: db, logger: logger, router: r, mqtt: mqttWorker, sim: sim}
+	a := &App{router: r, mqtt: mqttWorker, sim: sim}
 
 	bootCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()

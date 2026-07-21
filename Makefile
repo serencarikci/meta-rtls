@@ -1,8 +1,8 @@
-.PHONY: help up down logs backend-run frontend-run migrate deps test lint fmt ready
+.PHONY: help up down logs backend-run frontend-run deps test lint fmt ready
 
 help:
 	@echo "MetaRTLS targets:"
-	@echo "  make up            - Start Oracle, Redis, Mosquitto"
+	@echo "  make up            - Start Oracle and Mosquitto"
 	@echo "  make down          - Stop infrastructure"
 	@echo "  make logs          - Tail compose logs"
 	@echo "  make deps          - Install Go and frontend dependencies"

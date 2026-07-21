@@ -1,13 +1,5 @@
 const API_BASE = import.meta.env.VITE_API_BASE ?? ''
 
-export class ApiError extends Error {
-  status: number
-  constructor(status: number, message: string) {
-    super(message)
-    this.status = status
-  }
-}
-
 export async function api<T>(
   path: string,
   options: RequestInit = {},
@@ -20,7 +12,7 @@ export async function api<T>(
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new ApiError(res.status, body.error ?? res.statusText)
+    throw new Error(body.error ?? res.statusText)
   }
   return body.data as T
 }
