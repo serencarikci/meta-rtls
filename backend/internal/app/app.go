@@ -39,7 +39,8 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 
 	tenantHandler := tenant.NewHandler(tenant.NewService(tenant.NewRepository(db)))
 	rtlsHandler := rtlsconfig.NewHandler(rtlsconfig.NewService(rtlsconfig.NewRepository(db)))
-	metaHandler := metadata.NewHandler()
+	metaSvc := metadata.NewService(metadata.NewRepository(db))
+	metaHandler := metadata.NewHandler(metaSvc)
 
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -54,7 +55,7 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	}))
 
 	r.GET("/health", func(c *gin.Context) {
-		response.OK(c, metadata.HealthPayload())
+		response.OK(c, gin.H{"service": "metartls", "status": "ok"})
 	})
 
 	api := r.Group("/api/v1")
@@ -71,6 +72,9 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	defer cancel()
 	if err := idSvc.BootstrapDemoUsers(bootCtx); err != nil {
 		logger.Warn("demo user bootstrap skipped or failed", "err", err)
+	}
+	if err := metaSvc.BootstrapDemoMetadata(bootCtx); err != nil {
+		logger.Warn("demo metadata bootstrap skipped or failed", "err", err)
 	}
 
 	return a, nil

@@ -69,8 +69,8 @@ export default function LiveMapPage() {
               height: view.height,
               position: 'relative',
               background:
-                'repeating-linear-gradient(0deg, transparent, transparent 39px, #D5DEE8 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #D5DEE8 40px), #F8FAFC',
-              border: '1px solid #9AAEBF',
+                'repeating-linear-gradient(0deg, transparent, transparent 39px, #D8CFE6 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #D8CFE6 40px), #FCFAFD',
+              border: '1px solid #1A1028',
             }}
           >
             {(zones.data ?? []).map((z) => (
@@ -83,14 +83,21 @@ export default function LiveMapPage() {
                   top: z.minY * view.scale,
                   width: (z.maxX - z.minX) * view.scale,
                   height: (z.maxY - z.minY) * view.scale,
-                  bgcolor: 'rgba(224, 159, 62, 0.18)',
-                  border: '2px solid #E09F3E',
+                  bgcolor: 'rgba(200, 75, 255, 0.16)',
+                  border: '2px solid #1A1028',
                   display: 'flex',
                   alignItems: 'flex-start',
                   p: 0.5,
                 }}
               >
-                <Typography variant="caption" sx={{ fontWeight: 700, color: '#16324F' }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontWeight: 700,
+                    color: '#1A1028',
+                    fontFamily: '"JetBrains Mono", monospace',
+                  }}
+                >
                   {z.code}
                 </Typography>
               </Box>

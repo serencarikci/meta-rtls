@@ -17,7 +17,7 @@ Oracle may need 1–3 minutes on first start. The schema is created under `APP_U
 
 ```bash
 make deps
-make backend-run   # http://localhost:8080/health
+make backend-run   # http://localhost:8090/health
 make frontend-run  # http://localhost:5173
 ```
 
@@ -40,8 +40,13 @@ On first start, the API creates these users with bcrypt.
 - `GET /api/v1/buildings`
 - `GET /api/v1/floors`
 - `GET /api/v1/floors/:floorId/zones`
-- `GET /api/v1/metadata/definitions` (placeholder)
+- `GET/POST /api/v1/metadata/definitions`
+- `GET /api/v1/metadata/definitions/:id`
+- `GET/POST /api/v1/metadata/definitions/:id/versions`
+- `GET/POST /api/v1/metadata/versions/:versionId/fields`
+- `POST /api/v1/metadata/validate`
+- `GET /api/v1/metadata/features`
 
 ## Next step
 
-Phase 2: metadata definition/field CRUD + validation engine.
+Phase 3: MQTT simulator + location ingestion + WebSocket live map.

@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import SitesPage from './pages/SitesPage'
 import LiveMapPage from './pages/LiveMapPage'
+import MetadataPage from './pages/MetadataPage'
 import AppShell from './layout/AppShell'
 
 function PrivateRoute({ children }: { children: ReactNode }) {
@@ -27,6 +28,7 @@ export default function App() {
       >
         <Route index element={<DashboardPage />} />
         <Route path="sites" element={<SitesPage />} />
+        <Route path="metadata" element={<MetadataPage />} />
         <Route path="live-map" element={<LiveMapPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

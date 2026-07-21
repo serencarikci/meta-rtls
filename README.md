@@ -60,7 +60,7 @@ The main academic value is not the programming language. It is a **metadata-driv
 cp .env.example .env
 make up          # Oracle + Redis + Mosquitto
 make deps
-make backend-run # :8080
+make backend-run # :8090
 make frontend-run # :5173
 ```
 

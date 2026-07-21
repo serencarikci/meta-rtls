@@ -1,15 +1,5 @@
 import { FormEvent, useState } from 'react'
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Alert, Box, Button, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
 import { useAuthStore, AuthUser } from '../store/auth'
@@ -49,7 +39,18 @@ export default function LoginPage() {
       setSession(data.accessToken, data.user, tenantCode)
       navigate('/')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed')
+      const message = err instanceof Error ? err.message : 'Login failed'
+      const lower = message.toLowerCase()
+      if (
+        message === 'Not Found' ||
+        message === 'Internal Server Error' ||
+        lower.includes('failed to fetch') ||
+        lower.includes('econnrefused')
+      ) {
+        setError('API/Oracle is not ready. Run: make up, then make backend-run (port 8090)')
+      } else {
+        setError(message)
+      }
     } finally {
       setLoading(false)
     }
@@ -60,22 +61,98 @@ export default function LoginPage() {
       sx={{
         minHeight: '100vh',
         display: 'grid',
-        placeItems: 'center',
-        background:
-          'radial-gradient(1200px 600px at 10% 0%, #D7E6F5 0%, transparent 55%), linear-gradient(160deg, #EEF2F6 0%, #D9E3EE 100%)',
-        px: 2,
+        gridTemplateColumns: { xs: '1fr', md: '1.15fr 0.85fr' },
       }}
     >
-      <Card sx={{ width: '100%', maxWidth: 440, boxShadow: '0 18px 50px rgba(15,28,46,0.12)' }}>
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="overline" color="text.secondary">
-            Metadata-driven RTLS
-          </Typography>
-          <Typography variant="h4" sx={{ mb: 1, fontFamily: '"IBM Plex Mono", monospace' }}>
+      <Box
+        className="surface-grid"
+        sx={{
+          position: 'relative',
+          display: { xs: 'none', md: 'flex' },
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          p: { md: 6, lg: 8 },
+          color: '#FAFBF8',
+          overflow: 'hidden',
+        }}
+      >
+        <Box className="rise-in" sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+          <Box className="signal-dot" />
+          <Typography
+            sx={{
+              fontFamily: '"Syne", sans-serif',
+              fontWeight: 800,
+              fontSize: '1.35rem',
+              letterSpacing: '-0.04em',
+            }}
+          >
             MetaRTLS
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Multi-tenant location platform. Sign in with a demo tenant.
+        </Box>
+
+        <Box className="rise-in-delay" sx={{ maxWidth: 520 }}>
+          <Typography
+            sx={{
+              fontFamily: '"Syne", sans-serif',
+              fontWeight: 800,
+              fontSize: { md: '3.4rem', lg: '4.1rem' },
+              lineHeight: 0.95,
+              letterSpacing: '-0.05em',
+              mb: 2.5,
+            }}
+          >
+            Locate
+            <br />
+            every asset
+            <Box component="span" sx={{ color: 'var(--signal)' }}>
+              .
+            </Box>
+          </Typography>
+          <Typography sx={{ color: 'rgba(252,250,253,0.74)', maxWidth: 380, fontSize: '1.05rem' }}>
+            Metadata-driven indoor tracking for warehouses, hospitals and factories — one model,
+            many tenants.
+          </Typography>
+        </Box>
+
+        <Typography
+          sx={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: '0.72rem',
+            letterSpacing: '0.12em',
+            color: 'rgba(200,75,255,0.85)',
+            textTransform: 'uppercase',
+          }}
+        >
+          live signal · schema aware · multi-tenant
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          px: { xs: 2.5, sm: 4 },
+          py: 6,
+          background: 'linear-gradient(165deg, #FCFAFD 0%, #EFEAF6 55%, #E4DCF0 100%)',
+        }}
+      >
+        <Box className="rise-in" sx={{ width: '100%', maxWidth: 400 }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1, mb: 3 }}>
+            <Box className="signal-dot" />
+            <Typography sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 800 }}>
+              MetaRTLS
+            </Typography>
+          </Box>
+
+          <Typography variant="overline" sx={{ color: 'var(--mute)' }}>
+            Sign in
+          </Typography>
+          <Typography variant="h4" sx={{ mb: 1 }}>
+            Enter workspace
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3.5 }}>
+            Pick a demo tenant and continue.
           </Typography>
 
           <Stack component="form" spacing={2} onSubmit={onSubmit}>
@@ -107,8 +184,8 @@ export default function LoginPage() {
               {loading ? 'Signing in…' : 'Sign in'}
             </Button>
           </Stack>
-        </CardContent>
-      </Card>
+        </Box>
+      </Box>
     </Box>
   )
 }
