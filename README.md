@@ -109,7 +109,7 @@ make logs    # show Docker logs
 
 Moving tags on the floor plan (MQTT simulator + WebSocket):
 
-![Live Map](docs/images/05-live-map.png)
+![Live Map](docs/images/05-live-map.gif)
 
 ### Analysis
 
