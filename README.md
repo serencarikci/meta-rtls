@@ -6,9 +6,9 @@ You do not need real devices. The app can simulate moving tags.
 
 ## What you need
 
-\- Docker Desktop
-\- Go 1.24+
-\- Node.js 22+
+- Docker Desktop
+- Go 1.24+
+- Node.js 22+
 
 ## How to start the whole project
 
@@ -31,8 +31,8 @@ make up
 ```
 
 This starts:
-\- Oracle database on port `1521`
-\- Mosquitto MQTT on port `1883`
+- Oracle database on port `1521`
+- Mosquitto MQTT on port `1883`
 
 Wait 1–3 minutes the first time until Oracle is ready.
 
@@ -53,16 +53,16 @@ make backend-run
 API URL: http://localhost:8090
 
 Check:
-\- http://localhost:8090/health
-\- http://localhost:8090/ready
-\- http://localhost:8090?func=getversion
-\- http://localhost:8090?func=getconfig
+- http://localhost:8090/health
+- http://localhost:8090/ready
+- http://localhost:8090?func=getversion
+- http://localhost:8090?func=getconfig
 
 `/ready` must say Oracle is up.
 
 Frontend version/config:
-\- http://localhost:5173?func=getversion
-\- http://localhost:5173?func=getconfig
+- http://localhost:5173?func=getversion
+- http://localhost:5173?func=getconfig
 
 ### 5) Start the frontend UI
 
@@ -136,37 +136,37 @@ Moving tags on the floor plan (MQTT simulator + WebSocket):
 
 ## What it does
 
-\- Tenant login
-\- Sites, floors and zones
-\- Metadata fields and validation
-\- MQTT tag simulator
-\- Live map with WebSocket
-\- Compare small / medium / large tenants
-\- Simple change impact score
-\- Health and ready checks
+- Tenant login
+- Sites, floors and zones
+- Metadata fields and validation
+- MQTT tag simulator
+- Live map with WebSocket
+- Compare small / medium / large tenants
+- Simple change impact score
+- Health and ready checks
 
 ## More docs
 
-\- Backend: `backend/README.md`
-\- Frontend: `frontend/README.md`
+- Backend: `backend/README.md`
+- Frontend: `frontend/README.md`
 
 ## Production notes
 
-\- Edit `config/config.env`
-\- Set `appEnv` to `production`
-\- Use a long random `jwtSecret` (32+ characters)
-\- Set `corsOrigins` to your real UI URL
-\- Do not commit real secrets
+- Edit `config/config.env`
+- Set `appEnv` to `production`
+- Use a long random `jwtSecret` (32+ characters)
+- Set `corsOrigins` to your real UI URL
+- Do not commit real secrets
 
 ## Folders
 
-\- `backend/` — Go API
-\- `frontend/` — React UI
-\- `config/` — JSON config
-\- `docs/images/` — screenshots
-\- `logs/` — log files
-\- `deploy/` — Mosquitto config
-\- `.github/workflows/` — CI
+- `backend/` — Go API
+- `frontend/` — React UI
+- `config/` — JSON config
+- `docs/images/` — screenshots
+- `logs/` — log files
+- `deploy/` — Mosquitto config
+- `.github/workflows/` — CI
 
 ## License
 

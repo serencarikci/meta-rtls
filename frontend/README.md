@@ -5,9 +5,9 @@ It talks to the Go API with REST and WebSocket.
 
 ## What you need
 
-\- Node.js 22+
-\- Backend API running on http://localhost:8090
-\- Oracle ready (`/ready` must work)
+- Node.js 22+
+- Backend API running on http://localhost:8090
+- Oracle ready (`/ready` must work)
 
 ## How to start the frontend
 
@@ -39,12 +39,12 @@ Open: http://localhost:5173
 
 ## Version and config URLs
 
-\- http://localhost:5173?func=getversion
-\- http://localhost:5173?func=getconfig
+- http://localhost:5173?func=getversion
+- http://localhost:5173?func=getconfig
 
 Backend (same style):
-\- http://localhost:8090?func=getversion
-\- http://localhost:8090?func=getconfig
+- http://localhost:8090?func=getversion
+- http://localhost:8090?func=getconfig
 
 In code use `Services` (`src/services/Services.ts`): `getVersion()` and `getConfig()`.
 
@@ -53,9 +53,9 @@ Current frontend version: `0.1.0` (`package.json`).
 ## Important
 
 Vite sends these paths to the API:
-\- `/api`
-\- `/health`
-\- `/ready`
+- `/api`
+- `/health`
+- `/ready`
 
 So the UI needs the backend on port `8090`.
 
@@ -74,12 +74,12 @@ If login fails:
 
 ## Main screens
 
-\- Login
-\- Overview
-\- Sites & Zones
-\- Metadata
-\- Live Map (moving tags)
-\- Analysis
+- Login
+- Overview
+- Sites & Zones
+- Metadata
+- Live Map (moving tags)
+- Analysis
 
 ## Scripts
 
@@ -92,13 +92,13 @@ npm run preview   # preview build
 
 ## Stack
 
-\- React + TypeScript
-\- Vite
-\- Material UI
-\- TanStack Query
-\- Zustand
-\- React Router
-\- Prettier
+- React + TypeScript
+- Vite
+- Material UI
+- TanStack Query
+- Zustand
+- React Router
+- Prettier
 
 ## Folder layout
 
