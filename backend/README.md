@@ -5,9 +5,9 @@ One service. Clear folders. No microservices.
 
 ## What you need
 
-- Docker Desktop (for Oracle and MQTT)
-- Go 1.24+
-- Config file in the repo root: `config/config.env`
+\- Docker Desktop (for Oracle and MQTT)
+\- Go 1.24+
+\- Config file in the repo root: `config/config.env`
 
 ## How to start the backend
 
@@ -48,10 +48,10 @@ make backend-run
 
 ### 5) Check that it works
 
-- http://localhost:8090/health — process is up
-- http://localhost:8090/ready — Oracle is up
-- http://localhost:8090?func=getversion — API version
-- http://localhost:8090?func=getconfig — public config (no secrets)
+\- http://localhost:8090/health — process is up
+\- http://localhost:8090/ready — Oracle is up
+\- http://localhost:8090?func=getversion — API version
+\- http://localhost:8090?func=getconfig — public config (no secrets)
 
 If `/ready` fails, wait for Oracle and try again.
 
@@ -59,11 +59,11 @@ Current backend version: `0.1.0` (`internal/version`).
 
 ## Stack
 
-- Go + Gin
-- Oracle (`database/sql` + go-ora)
-- JWT auth
-- MQTT (Eclipse Paho)
-- WebSocket (Gorilla)
+\- Go + Gin
+\- Oracle (`database/sql` + go-ora)
+\- JWT auth
+\- MQTT (Eclipse Paho)
+\- WebSocket (Gorilla)
 
 ## Main folders
 
@@ -84,12 +84,12 @@ migrations/oracle/       SQL schema and seed
 
 ## Main API groups
 
-- `/api/v1/auth/*`
-- `/api/v1/tenants`, `/api/v1/sites`, `/api/v1/floors`, `/api/v1/floors/:id/zones`
-- `/api/v1/metadata/*`
-- `/api/v1/locations/latest`, `/api/v1/ws/locations?token=...`
-- `/api/v1/simulator/*`
-- `/api/v1/analysis/*`
+\- `/api/v1/auth/*`
+\- `/api/v1/tenants`, `/api/v1/sites`, `/api/v1/floors`, `/api/v1/floors/:id/zones`
+\- `/api/v1/metadata/*`
+\- `/api/v1/locations/latest`, `/api/v1/ws/locations?token=...`
+\- `/api/v1/simulator/*`
+\- `/api/v1/analysis/*`
 
 ## Tests
 
@@ -101,10 +101,10 @@ go vet ./...
 
 ## Notes
 
-- Default port: `8090`
-- Config files: `config/config.env` (local) and `config/config-temp.env` (template)
-- Optional: `CONFIG_PATH=/path/to/file`
-- Logs: `logs/debug.log`, `logs/info.log`, `logs/error.log` (+ console)
-- Optional: `LOG_DIR=/path/to/logs`
-- Demo users load on startup when the DB is ready
-- If MQTT is down, the simulator can still run locally
+\- Default port: `8090`
+\- Config files: `config/config.env` (local) and `config/config-temp.env` (template)
+\- Optional: `CONFIG_PATH=/path/to/file`
+\- Logs: `logs/debug.log`, `logs/info.log`, `logs/error.log` (+ console)
+\- Optional: `LOG_DIR=/path/to/logs`
+\- Demo users load on startup when the DB is ready
+\- If MQTT is down, the simulator can still run locally
