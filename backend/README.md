@@ -50,8 +50,12 @@ make backend-run
 
 - http://localhost:8090/health — process is up
 - http://localhost:8090/ready — Oracle is up
+- http://localhost:8090?func=getversion — API version
+- http://localhost:8090?func=getconfig — public config (no secrets)
 
 If `/ready` fails, wait for Oracle and try again.
+
+Current backend version: `0.1.0` (`internal/version`).
 
 ## Stack
 

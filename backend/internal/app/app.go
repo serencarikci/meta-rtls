@@ -16,6 +16,8 @@ import (
 	"github.com/denizyetis/meta-rtls/internal/modules/tenant"
 	"github.com/denizyetis/meta-rtls/internal/platform/auth"
 	"github.com/denizyetis/meta-rtls/internal/platform/response"
+	"github.com/denizyetis/meta-rtls/internal/services"
+	"github.com/denizyetis/meta-rtls/internal/version"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -50,10 +52,13 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 	locHandler := location.NewHandler(locSvc, sim, tokens)
 	analysisSvc := analysis.NewService(analysis.NewRepository(db))
 	analysisHandler := analysis.NewHandler(analysisSvc)
+	systemSvc := services.NewServices(cfg)
+	systemHandler := services.NewHandler(systemSvc)
 
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(securityHeaders())
+	systemHandler.RegisterRoot(r)
 	r.Use(requestLogger(logger))
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     cfg.CORSOrigins,
@@ -66,7 +71,8 @@ func New(cfg *config.Config, db *sql.DB, logger *slog.Logger) (*App, error) {
 
 	r.GET("/health", func(c *gin.Context) {
 		response.OK(c, gin.H{
-			"service": "metartls",
+			"service": version.SERVICE_NAME,
+			"version": version.VERSION,
 			"status":  "ok",
 			"env":     cfg.AppEnv,
 		})

@@ -55,8 +55,14 @@ API URL: http://localhost:8090
 Check:
 - http://localhost:8090/health
 - http://localhost:8090/ready
+- http://localhost:8090?func=getversion
+- http://localhost:8090?func=getconfig
 
 `/ready` must say Oracle is up.
+
+Frontend version/config:
+- http://localhost:5173?func=getversion
+- http://localhost:5173?func=getconfig
 
 ### 5) Start the frontend UI
 

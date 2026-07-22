@@ -37,6 +37,19 @@ make frontend-run
 
 Open: http://localhost:5173
 
+## Version and config URLs
+
+- http://localhost:5173?func=getversion
+- http://localhost:5173?func=getconfig
+
+Backend (same style):
+- http://localhost:8090?func=getversion
+- http://localhost:8090?func=getconfig
+
+In code use `Services` (`src/services/Services.ts`): `getVersion()` and `getConfig()`.
+
+Current frontend version: `0.1.0` (`package.json`).
+
 ## Important
 
 Vite sends these paths to the API:
@@ -94,6 +107,7 @@ src/
   api/           API helper
   layout/        top menu and page shell
   pages/         screens
+  services/      version and config helpers
   store/         auth state
   styles/        global CSS
   types/         shared types
